@@ -24,8 +24,7 @@ public class ProductController {
     @GetMapping("/all")
     public ResponseEntity<APIResponse> getAllProducts() {
         try {
-            List<Product> products = productService.getAllProducts();
-            List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
+            List<ProductDto> convertedProducts = productService.getConvertedProducts();
             return ResponseEntity.ok(new APIResponse("products retrieved", convertedProducts));
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new APIResponse(" no product found", null));

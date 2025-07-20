@@ -87,15 +87,11 @@ public class ProductService implements IProductService {
         return existingProduct;
     }
 
-    @Override
-    public List<Product> getAllProducts() {
-
-        return productRepo.findAll();
-    }
-
     // map product with ProductDto
     @Override
-    public List<ProductDto> getConvertedProducts(List<Product> products) {
+    public List<ProductDto> getConvertedProducts() {
+        List<Product> products = productRepo.findAll();
+
         return products.stream()
                 .map(product -> {
                     ProductDto productDto = modelMapper.map(product, ProductDto.class);

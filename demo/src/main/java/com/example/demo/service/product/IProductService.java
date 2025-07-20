@@ -1,7 +1,6 @@
 package com.example.demo.service.product;
 
 
-
 import com.example.demo.dtos.AddProductDTO;
 import com.example.demo.dtos.ProductDto;
 import com.example.demo.dtos.ProductUpdateDTO;
@@ -18,8 +17,6 @@ public interface IProductService {
 
     Product updateProduct(ProductUpdateDTO product, Long productId);
 
-    List<Product> getAllProducts();
-
     List<Product> getProductsByCategory(String category);
 
     List<Product> getProductsByBrand(String brand);
@@ -32,6 +29,6 @@ public interface IProductService {
 
     Long countProductsByBrandAndName(String brand, String name);
 
-    List<ProductDto> getConvertedProducts(List<Product> products);
+    List<ProductDto> getConvertedProducts();
 
 }
