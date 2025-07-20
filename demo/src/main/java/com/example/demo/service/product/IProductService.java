@@ -3,6 +3,7 @@ package com.example.demo.service.product;
 
 
 import com.example.demo.dtos.AddProductDTO;
+import com.example.demo.dtos.ProductDto;
 import com.example.demo.dtos.ProductUpdateDTO;
 import com.example.demo.model.Product;
 
@@ -30,4 +31,7 @@ public interface IProductService {
     List<Product> getProductsByBrandAndName(String brand, String name);
 
     Long countProductsByBrandAndName(String brand, String name);
+
+    List<ProductDto> getConvertedProducts(List<Product> products);
+
 }

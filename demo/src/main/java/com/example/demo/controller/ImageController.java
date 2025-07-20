@@ -6,6 +6,7 @@ import com.example.demo.model.Image;
 import com.example.demo.response.APIResponse;
 import com.example.demo.service.image.IImageService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +21,7 @@ import java.util.List;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
+@Slf4j
 @RestController
 @RequestMapping("${api.prefix}/images")
 @RequiredArgsConstructor
@@ -27,7 +29,7 @@ public class ImageController {
     private final IImageService imageService;
 
     @PostMapping("/upload")
-    public ResponseEntity<APIResponse> saveImages(@RequestParam List<MultipartFile> files, Long productId) {
+    public ResponseEntity<APIResponse> saveImages(@RequestParam List<MultipartFile> files, @RequestParam Long productId) {
         try {
             List<ImageDto> imageDtos = imageService.saveImage(files, productId);
             return ResponseEntity.ok(new APIResponse("Upload success", imageDtos));
@@ -41,6 +43,7 @@ public class ImageController {
     public ResponseEntity<Resource> downloadImage(@PathVariable Long imageId) throws SQLException {
 
         Image image = imageService.getImageById(imageId);
+        log.info("image: "+image.getId());
 
         ByteArrayResource resource = new ByteArrayResource(image.getImage().getBytes(1, (int) image.getImage().length()));
 

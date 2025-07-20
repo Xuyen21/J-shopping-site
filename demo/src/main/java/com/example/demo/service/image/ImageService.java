@@ -9,6 +9,7 @@ import com.example.demo.service.product.IProductService;
 import com.example.demo.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.sql.rowset.serial.SerialBlob;
@@ -24,6 +25,7 @@ public class ImageService implements IImageService {
     private final IProductService productService;
 
     @Override
+//    @Transactional(readOnly = true)
     public Image getImageById(Long id) {
         return imageRepo.findById(id).orElseThrow(() -> new ImageNotFound("image not found"));
     }

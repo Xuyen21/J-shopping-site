@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dtos.AddProductDTO;
+import com.example.demo.dtos.ProductDto;
 import com.example.demo.dtos.ProductUpdateDTO;
 import com.example.demo.model.Product;
 import com.example.demo.response.APIResponse;
@@ -24,7 +25,8 @@ public class ProductController {
     public ResponseEntity<APIResponse> getAllProducts() {
         try {
             List<Product> products = productService.getAllProducts();
-            return ResponseEntity.ok(new APIResponse("products retrieved", products));
+            List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
+            return ResponseEntity.ok(new APIResponse("products retrieved", convertedProducts));
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new APIResponse(" no product found", null));
         }
@@ -96,7 +98,7 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/products/by-brand")
+    @GetMapping("/by-brand")
     public ResponseEntity<APIResponse> getProductByBrand(@RequestParam String brandName) {
         try {
             List<Product> products = productService.getProductsByBrand(brandName);
