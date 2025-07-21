@@ -6,14 +6,12 @@ import com.example.demo.dtos.ProductDto;
 import com.example.demo.dtos.ProductUpdateDTO;
 import com.example.demo.exeptions.ProductNotFoundExeption;
 import com.example.demo.model.Category;
-import com.example.demo.model.Image;
 import com.example.demo.model.Product;
 import com.example.demo.repo.CategoryRepo;
 import com.example.demo.repo.ImageRepo;
 import com.example.demo.repo.ProductRepo;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -55,7 +53,14 @@ public class ProductService implements IProductService {
 
     @Override
     public Product getProductById(Long id) {
-        return productRepo.findById(id).orElseThrow(() -> new ProductNotFoundExeption("product not found oh oh"));
+        return productRepo.findById(id)
+                .orElseThrow(() -> new ProductNotFoundExeption("product not found oh oh"));
+    }
+
+    @Override
+    public ProductDto responseGetProductById(Long id) {
+        Product product = getProductById(id);
+        return modelMapper.map(product, ProductDto.class);
     }
 
     @Override
@@ -68,11 +73,16 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Product updateProduct(ProductUpdateDTO productUpdateDTO, Long productId) {
-        return productRepo.findById(productId)
+    public ProductDto updateProduct(ProductUpdateDTO productUpdateDTO, Long productId) {
+        Product product = productRepo.findById(productId)
                 .map(existingProduct -> updateExistingProduct(existingProduct, productUpdateDTO))
-                .map(productRepo::save)
+//                .map(productRepo::save)
                 .orElseThrow(() -> new ProductNotFoundExeption("Product not found to update"));
+
+        ProductDto productDto = modelMapper.map(product, ProductDto.class);
+
+        productRepo.save(product);
+        return productDto;
     }
 
     private Product updateExistingProduct(Product existingProduct, ProductUpdateDTO productUpdateDTO) {
@@ -111,27 +121,39 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> getProductsByBrand(String brand) {
-
-        return productRepo.findByBrand(brand);
+    public List<ProductDto> getProductsByBrand(String brand) {
+        List<Product> products = productRepo.findByBrand(brand);
+        return products.stream()
+                .map(product -> modelMapper.map(product, ProductDto.class))
+                .toList();
     }
 
     @Override
-    public List<Product> getProductsByCategoryAndBrand(String someCategory, String brand) {
+    public List<ProductDto> getProductsByCategoryAndBrand(String someCategory, String brand) {
 
-        return productRepo.findByCategoryNameAndBrand(someCategory, brand);
+        List<Product> products = productRepo.findByCategoryNameAndBrand(someCategory, brand);
+        return products.stream().
+                map(product -> modelMapper.map(product, ProductDto.class))
+                .toList();
     }
 
     @Override
-    public List<Product> getProductsByName(String name) {
+    public List<ProductDto> getProductsByName(String name) {
 
-        return productRepo.findByName(name);
+        List<Product> products = productRepo.findByName(name);
+        if (products.isEmpty()) {
+            throw new ProductNotFoundExeption("no product with name %s".formatted(name));
+        }
+        return products.stream()
+                .map(product -> modelMapper.map(product, ProductDto.class))
+                .toList();
     }
 
     @Override
-    public List<Product> getProductsByBrandAndName(String brand, String name) {
+    public List<ProductDto> getProductsByBrandAndName(String brand, String name) {
 
-        return productRepo.findByBrandAndName(brand, name);
+        List<Product> products = productRepo.findByBrandAndName(brand, name);
+        return products.stream().map(product -> modelMapper.map(product, ProductDto.class)).toList();
     }
 
     @Override
@@ -139,6 +161,5 @@ public class ProductService implements IProductService {
 
         return productRepo.countByBrandAndName(brand, name);
     }
-
 
 }

@@ -13,19 +13,21 @@ public interface IProductService {
 
     Product getProductById(Long id);
 
+    ProductDto responseGetProductById(Long id);
+
     void deleteProductById(Long id);
 
-    Product updateProduct(ProductUpdateDTO product, Long productId);
+    ProductDto updateProduct(ProductUpdateDTO product, Long productId);
 
     List<Product> getProductsByCategory(String category);
 
-    List<Product> getProductsByBrand(String brand);
+    List<ProductDto> getProductsByBrand(String brand);
 
-    List<Product> getProductsByCategoryAndBrand(String categpry, String brand);
+    List<ProductDto> getProductsByCategoryAndBrand(String categpry, String brand);
 
-    List<Product> getProductsByName(String name);
+    List<ProductDto> getProductsByName(String name);
 
-    List<Product> getProductsByBrandAndName(String brand, String name);
+    List<ProductDto> getProductsByBrandAndName(String brand, String name);
 
     Long countProductsByBrandAndName(String brand, String name);
 

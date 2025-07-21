@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dtos.AddProductDTO;
 import com.example.demo.dtos.ProductDto;
 import com.example.demo.dtos.ProductUpdateDTO;
+import com.example.demo.exeptions.ProductNotFoundExeption;
 import com.example.demo.model.Product;
 import com.example.demo.response.APIResponse;
 import com.example.demo.service.product.IProductService;
@@ -31,10 +32,10 @@ public class ProductController {
         }
     }
 
-    @GetMapping("product/{productId}/product")
+    @GetMapping("product/{productId}")
     public ResponseEntity<APIResponse> getProductById(@PathVariable Long productId) {
         try {
-            Product product = productService.getProductById(productId);
+            ProductDto product = productService.responseGetProductById(productId);
             return ResponseEntity.ok(new APIResponse("product retrieved", product));
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new APIResponse(e.getMessage(), null));
@@ -54,7 +55,7 @@ public class ProductController {
     @PutMapping("product/{productId}/product")
     public ResponseEntity<APIResponse> updateProduct(@RequestBody ProductUpdateDTO productUpdateDTO, @PathVariable Long productId) {
         try {
-            Product theProduct = productService.updateProduct(productUpdateDTO, productId);
+            ProductDto theProduct = productService.updateProduct(productUpdateDTO, productId);
             return ResponseEntity.ok(new APIResponse("product updated", theProduct));
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new APIResponse(e.getMessage(), null));
@@ -71,10 +72,21 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/by-name")
+    public ResponseEntity<APIResponse> getProductByName(@RequestParam String productName) {
+        try {
+            List<ProductDto> products = productService.getProductsByName(productName);
+            return ResponseEntity.ok(new APIResponse("retrieved product by name", products));
+        } catch (ProductNotFoundExeption e) {
+            return ResponseEntity.status(NOT_FOUND).body(new APIResponse(e.getMessage(), null));
+
+        }
+    }
+
     @GetMapping("/products/by/brand-and-name")
     public ResponseEntity<APIResponse> getProductByBrandAndName(@RequestParam String brandName, @RequestParam String productName) {
         try {
-            List<Product> products = productService.getProductsByBrandAndName(brandName, productName);
+            List<ProductDto> products = productService.getProductsByBrandAndName(brandName, productName);
             if (products.isEmpty()) {
                 return ResponseEntity.status(NOT_FOUND).body(new APIResponse("no product found", null));
             }
@@ -85,9 +97,9 @@ public class ProductController {
     }
 
     @GetMapping("/products/by/category-and-brand")
-    public ResponseEntity<APIResponse> getProductByCategoryAndBrand(@RequestParam String brandName, @RequestParam String category) {
+    public ResponseEntity<APIResponse> getProductByCategoryAndBrand(@RequestParam String category, @RequestParam String brandName) {
         try {
-            List<Product> products = productService.getProductsByCategoryAndBrand(category, brandName);
+            List<ProductDto> products = productService.getProductsByCategoryAndBrand(category, brandName);
             if (products.isEmpty()) {
                 return ResponseEntity.status(NOT_FOUND).body(new APIResponse("no product found", null));
             }
@@ -100,7 +112,7 @@ public class ProductController {
     @GetMapping("/by-brand")
     public ResponseEntity<APIResponse> getProductByBrand(@RequestParam String brandName) {
         try {
-            List<Product> products = productService.getProductsByBrand(brandName);
+            List<ProductDto> products = productService.getProductsByBrand(brandName);
             if (products.isEmpty()) {
                 return ResponseEntity.status(NOT_FOUND).body(new APIResponse("no product found", null));
             }

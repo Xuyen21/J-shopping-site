@@ -1,6 +1,7 @@
 package com.example.demo.service.image;
 
 import com.example.demo.dtos.ImageDto;
+import com.example.demo.dtos.ProductDto;
 import com.example.demo.exeptions.ImageNotFound;
 import com.example.demo.model.Image;
 import com.example.demo.model.Product;
