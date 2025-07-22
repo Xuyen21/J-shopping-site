@@ -2,7 +2,7 @@ package com.example.demo.service.category;
 
 
 import com.example.demo.exeptions.AlreadyExists;
-import com.example.demo.exeptions.CategoryNotFoundException;
+import com.example.demo.exeptions.ResourceNotFoundException;
 import com.example.demo.model.Category;
 import com.example.demo.repo.CategoryRepo;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public Category getCategoryById(Long id) {
-        return categoryRepo.findById(id).orElseThrow(() -> new CategoryNotFoundException("categorynotfound"));
+        return categoryRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("categorynotfound"));
     }
 
     @Override
@@ -57,7 +57,7 @@ public class CategoryService implements ICategoryService {
     @Override
     public void deleteCategoryById(Long id) {
         categoryRepo.findById(id).ifPresentOrElse(categoryRepo::delete, () -> {
-            throw new CategoryNotFoundException("for delete, category is not found");
+            throw new ResourceNotFoundException("for delete, category is not found");
         });
 
     }

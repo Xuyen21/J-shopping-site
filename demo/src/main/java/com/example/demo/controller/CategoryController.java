@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.exeptions.AlreadyExists;
-import com.example.demo.exeptions.CategoryNotFoundException;
+import com.example.demo.exeptions.ResourceNotFoundException;
 import com.example.demo.model.Category;
 import com.example.demo.response.APIResponse;
 import com.example.demo.service.category.ICategoryService;
@@ -47,7 +47,7 @@ public class CategoryController {
             Category theCategory = categoryService.getCategoryById(id);
             return ResponseEntity.ok(new APIResponse("category found", theCategory));
 
-        } catch (CategoryNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new APIResponse(e.getMessage(), null));
 
         }
@@ -59,7 +59,7 @@ public class CategoryController {
             Category theCategory = categoryService.getCategoryByName(name);
             return ResponseEntity.ok(new APIResponse("category found", theCategory));
 
-        } catch (CategoryNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new APIResponse(e.getMessage(), null));
 
         }
@@ -71,7 +71,7 @@ public class CategoryController {
             categoryService.deleteCategoryById(id);
             return ResponseEntity.ok(new APIResponse("category found", null));
 
-        } catch (CategoryNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new APIResponse(e.getMessage(), null));
         }
     }
@@ -82,7 +82,7 @@ public class CategoryController {
             Category updateCategory = categoryService.updateCategory(category, id);
             return ResponseEntity.ok(new APIResponse("category found", updateCategory));
 
-        } catch (CategoryNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new APIResponse(e.getMessage(), null));
 
         }
