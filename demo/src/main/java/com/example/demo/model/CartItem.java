@@ -18,7 +18,7 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne() //@ManyToOne(fetch = FetchType.EAGER)
     private Product product;
 
     private int quantity;

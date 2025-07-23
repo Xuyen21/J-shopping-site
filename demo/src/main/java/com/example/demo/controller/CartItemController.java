@@ -43,7 +43,7 @@ public class CartItemController {
     }
 
     @PutMapping("cart/{cartId}/item/{itemId}/update")
-    public ResponseEntity<APIResponse> updateItemQuantiry(@PathVariable Long cartId,
+    public ResponseEntity<APIResponse> updateItemQuantity(@PathVariable Long cartId,
                                                           @PathVariable Long itemId,
                                                           @RequestParam Integer quantity
     ) {
